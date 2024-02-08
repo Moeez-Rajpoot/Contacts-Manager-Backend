@@ -5,7 +5,9 @@ const getcontact = (req,res)=>{
     };
 
 const postcontact = (req,res)=>{
+    console.log("This is Body msg " , req.body );
     res.json({
+           
             message: 'Hello there create new contact'
         });
 };
