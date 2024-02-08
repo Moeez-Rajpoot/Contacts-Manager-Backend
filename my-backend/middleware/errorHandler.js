@@ -1,9 +1,22 @@
-const errorHandlder = (err,req,res,next)=>{
+const errorHandlder = (err, req, res, next) => {
+    const statuscode = res.statusCode ? res.statusCode : 500;
+    switch (statuscode) {
+        case 400:
+            res.json({
+                title: "400 Error", message: err.message, stackTrace: err.stack
+            })
+            break;
 
-const statuscode = res.statusCode ? res.statusCode : 500;
-res.json({
-    message: err.message , stackTrace: err.stack
-})
+        case 404:
+            res.json({
+                title: "404 Error", message: err.message, stackTrace: err.stack
+            })
+
+        default:
+            break;
+    }
+
+
 
 };
 
