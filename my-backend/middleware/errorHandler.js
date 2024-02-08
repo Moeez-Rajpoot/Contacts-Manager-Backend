@@ -13,6 +13,7 @@ const errorHandlder = (err, req, res, next) => {
             })
 
         default:
+            console.log("No Error");
             break;
     }
 
