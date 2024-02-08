@@ -6,6 +6,12 @@ const getcontact = (req,res)=>{
 
 const postcontact = (req,res)=>{
     console.log("This is Body msg " , req.body );
+    const {name , email , phone } = req.body;
+    if ( !name || !email || !phone) {
+        res.status(400);
+        throw new Error("Error in Post Request");
+        
+    }
     res.json({
            
             message: 'Hello there create new contact'
