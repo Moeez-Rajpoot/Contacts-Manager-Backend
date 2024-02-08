@@ -1,10 +1,12 @@
-const getcontact = (req, res) => {
+const asynchandler = require('express-async-handler');
+
+const getcontact = asynchandler( async (req, res) => {
     res.json({
         message: 'Hello there this is get'
     });
-};
+});
 
-const postcontact = (req, res) => {
+const postcontact =asynchandler(async (req, res) => {
     console.log("This is Body msg ", req.body);
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
@@ -16,27 +18,27 @@ const postcontact = (req, res) => {
 
         message: 'Hello there create new contact'
     });
-};
+});
 
 
-const putcontact = (req, res) => {
+const putcontact = asynchandler(async (req, res) => {
     res.json({
         message: `Hello there  ${req.params.id}`
     });
-};
+});
 
 
-const deletecontact = (req, res) => {
+const deletecontact =asynchandler( async (req, res) => {
     res.json({
         message: `The Contact is deleted of ${req.params.id}`
     });
-};
+});
 
-const getcontactid = (req, res) => {
+const getcontactid =asynchandler(async (req, res) => {
     res.json({
         message: `Getting Contact of id ${req.params.id}`
     });
-};
+});
 
 
 module.exports = { getcontact, postcontact, putcontact, deletecontact, getcontactid };
