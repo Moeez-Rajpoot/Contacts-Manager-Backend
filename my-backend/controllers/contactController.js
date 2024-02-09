@@ -1,6 +1,25 @@
 const asynchandler = require('express-async-handler');
 const Contacts = require('../model/contactModel');
+
+
 const getcontact = asynchandler(async (req, res) => {
+
+    try {
+        const Allcontacts = await Contacts.find();
+        
+
+        res.json({
+            message:"All Contacts Displayed",
+            Contacts: Allcontacts
+
+        });
+    } catch (error) {
+
+        res.status(404).json({
+            message:"Error No contacts Found"
+        })
+        
+    }
 
     const Allcontacts = await Contacts.find();
     
