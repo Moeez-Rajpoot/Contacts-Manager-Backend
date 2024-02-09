@@ -1,5 +1,5 @@
 const asynchandler = require('express-async-handler');
-
+const Contacts =  require('../model/contactModel');
 const getcontact = asynchandler( async (req, res) => {
     res.json({
         message: 'Hello there this is get'
@@ -14,10 +14,28 @@ const postcontact =asynchandler(async (req, res) => {
         throw new Error("Error in Post Request");
 
     }
-    res.json({
 
-        message: 'Hello there create new contact'
-    });
+    try {
+        // Create a new instance of the Contact model with the provided data
+        const newContact = await Contacts.create({
+            name,
+            email,
+            phone
+        });
+
+        // Respond with a success message
+        res.status(201).json({
+            message: 'Contact created successfully',
+            contact: newContact
+        });
+    } catch (error) {
+        // Handle any errors that occur during the creation process
+        console.error('Error creating contact:', error);
+        res.status(404).json({
+            message: 'Internal Server Error'
+        });
+    }
+
 });
 
 
