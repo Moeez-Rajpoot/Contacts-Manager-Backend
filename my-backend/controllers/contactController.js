@@ -1,12 +1,20 @@
 const asynchandler = require('express-async-handler');
-const Contacts =  require('../model/contactModel');
-const getcontact = asynchandler( async (req, res) => {
+const Contacts = require('../model/contactModel');
+const getcontact = asynchandler(async (req, res) => {
+
+    const Allcontacts = await Contacts.find();
+    
+
+
+
+
+
     res.json({
         message: 'Hello there this is get'
     });
 });
 
-const postcontact =asynchandler(async (req, res) => {
+const postcontact = asynchandler(async (req, res) => {
     console.log("This is Body msg ", req.body);
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
@@ -16,20 +24,17 @@ const postcontact =asynchandler(async (req, res) => {
     }
 
     try {
-        // Create a new instance of the Contact model with the provided data
         const newContact = await Contacts.create({
             name,
             email,
             phone
         });
 
-        // Respond with a success message
         res.status(201).json({
             message: 'Contact created successfully',
             contact: newContact
         });
     } catch (error) {
-        // Handle any errors that occur during the creation process
         console.error('Error creating contact:', error);
         res.status(404).json({
             message: 'Internal Server Error'
@@ -40,19 +45,38 @@ const postcontact =asynchandler(async (req, res) => {
 
 
 const putcontact = asynchandler(async (req, res) => {
-    res.json({
-        message: `Hello there  ${req.params.id}`
-    });
+    try {
+        const id = req.params;
+        const { name, email, phone } = req.body;
+
+        const updatecontact = await Contacts.findByIdAndUpdate({
+            id,
+            name,
+            email,
+            phone
+
+        }, { new: true });
+        res.json({
+            message: "Contact Sucessfully Updated"
+        })
+
+    } catch (error) {
+        res.json({
+            message: "Error While Udating Contact"
+        })
+
+    }
+
 });
 
 
-const deletecontact =asynchandler( async (req, res) => {
+const deletecontact = asynchandler(async (req, res) => {
     res.json({
         message: `The Contact is deleted of ${req.params.id}`
     });
 });
 
-const getcontactid =asynchandler(async (req, res) => {
+const getcontactid = asynchandler(async (req, res) => {
     res.json({
         message: `Getting Contact of id ${req.params.id}`
     });
