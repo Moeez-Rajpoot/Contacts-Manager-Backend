@@ -9,6 +9,7 @@ connectDB();
 app.use(express.json());
 
 app.use("/api/msg", require("./routes/contactRoutes"));
+app.use("/api/user", require("./routes/userRoutes"));
 app.use(ErrorHandlder);
 
 app.listen(PORT, ()=>{
