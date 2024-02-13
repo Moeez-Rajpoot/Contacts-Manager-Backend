@@ -17,11 +17,11 @@ const Register = asynchandler(async (req, res) => {
     }
     const CheckUser = await User.findOne({username});
     if (CheckUser) {
-        res.json({
-            message:"Username Already Registered"
-        });
+        res.status(400);
+        throw new Error("User Already Registered");
         
     }
+    
     
 
         
