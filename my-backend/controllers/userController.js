@@ -21,6 +21,9 @@ const Register = asynchandler(async (req, res) => {
 });
 
 const Login = asynchandler(async (req, res) => {
+    res.json({
+        message:"Login Successfully"
+    })
 
     
  
@@ -31,6 +34,9 @@ const Login = asynchandler(async (req, res) => {
 });
 
 const Current = asynchandler(async (req, res) => {
+
+    console.log("Current User is  mOEEZ");
+    process.abort;
 
     
  
