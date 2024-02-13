@@ -15,14 +15,14 @@ const Register = asynchandler(async (req, res) => {
   const CheckUsername = await User.findOne({ username });
   if (CheckUsername) {
     res.status(400);
-    throw new Error("User Already Registered");
+    throw new Error("Username Already Registered");
   }
   const CheckUseremail = await User.findOne({ email });
   if (CheckUseremail) {
     res.status(400);
-    throw new Error("User Already Registered");
+    throw new Error("Email Already Registered");
   }
-  const hashpassword = Bcrypt.hash(password, 10);
+  const hashpassword = await Bcrypt.hash(password, 10);
   const NewUser = await User.create({
     username,
     email,
@@ -34,7 +34,7 @@ const Register = asynchandler(async (req, res) => {
     res.status(201).json({
       _id: NewUser.id,
       _username: NewUser.username,
-      _emial: NewUser.email,
+      _email: NewUser.email,
     });
   } else {
     res.status(400);
