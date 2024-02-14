@@ -19,10 +19,10 @@ const validate = asynchandler(async (req, res, next) => {
             next();
         } catch (err) {
             if (err.name === 'TokenExpiredError') {
-                // Handle token expiration error
+        
                 res.status(401).json({ message: 'Token expired' });
             } else {
-                // Handle other verification errors
+        
                 res.status(401).json({ message: 'Invalid token' });
             }
         }
