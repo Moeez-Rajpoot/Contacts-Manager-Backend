@@ -62,7 +62,7 @@ const Login = asynchandler(async (req, res) => {
         },
       },
       process.env.ACCESSTOKEN,
-      { expiresIn: "2m" }
+      { expiresIn: "5m" }
     );
     res.status(201).json({
         AccessToken : accessToken
