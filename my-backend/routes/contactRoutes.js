@@ -3,7 +3,7 @@ const router = express.Router();
 const GetContact = require('../controllers/contactController');
 const  validate  = require('../middleware/authenticateRoute');
 
-// router.use(validate);
+router.use(validate);
 
 router.route("/").get(GetContact.getcontact);
 

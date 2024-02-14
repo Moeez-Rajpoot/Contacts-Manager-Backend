@@ -84,10 +84,6 @@ const Current = asynchandler(async (req, res) => {
 
   res.json(req.user);
 
-  
-
-
-
 
 });
 
