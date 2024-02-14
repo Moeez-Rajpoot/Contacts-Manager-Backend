@@ -49,7 +49,6 @@ const Register = asynchandler(async (req, res) => {
   }
 });
 
-
 const Login = asynchandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -72,8 +71,8 @@ const Login = asynchandler(async (req, res) => {
       { expiresIn: "20m" }
     );
     res.status(201).json({
-        AccessToken : accessToken
-    })
+      AccessToken: accessToken,
+    });
   } else {
     res.status(401);
     throw new Error("Invalid email or Password ");
@@ -81,10 +80,7 @@ const Login = asynchandler(async (req, res) => {
 });
 
 const Current = asynchandler(async (req, res) => {
-
   res.json(req.user);
-
-
 });
 
 module.exports = { Register, Login, Current };

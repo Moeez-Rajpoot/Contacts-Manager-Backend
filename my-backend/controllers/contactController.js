@@ -3,7 +3,7 @@ const Contacts = require("../model/contactModel");
 
 const getcontact = asynchandler(async (req, res) => {
   try {
-    const Allcontacts = await Contacts.find({ user_id: req.user.id});
+    const Allcontacts = await Contacts.find({ user_id: req.user.id });
     res.json({
       message: "All Contacts Displayed",
       Contacts: Allcontacts,
@@ -28,7 +28,7 @@ const postcontact = asynchandler(async (req, res) => {
       name,
       email,
       phone,
-      user_id: req.user.id
+      user_id: req.user.id,
     });
 
     res.status(201).json({
@@ -49,25 +49,23 @@ const putcontact = asynchandler(async (req, res) => {
     if (!contact) {
       res.status(404);
       throw new Error("No Contact Found");
-      
     }
-  
-    if ( contact.user_id.toString() !== req.user.id) {
+
+    if (contact.user_id.toString() !== req.user.id) {
       res.status(403);
-      throw new Error("User dont have permission to update other user contacts");
-      
+      throw new Error(
+        "User dont have permission to update other user contacts"
+      );
     }
     const updatecontact = await Contacts.findByIdAndUpdate(
-      
-        req.params.id,
-        req.body,
-        
+      req.params.id,
+      req.body,
+
       { new: true }
-      
     );
     res.json({
       message: "Contact Sucessfully Updated",
-      updatecontact: updatecontact
+      updatecontact: updatecontact,
     });
   } catch (error) {
     res.json({
@@ -76,17 +74,15 @@ const putcontact = asynchandler(async (req, res) => {
   }
   res.json({
     message: `The Contact is deleted of ${req.params.id}`,
-});
+  });
 });
 
 const deletecontact = asynchandler(async (req, res) => {
   try {
- 
     const contact = await Contacts.findById(req.params.id);
     if (!contact) {
       res.status(404);
       throw new Error("No Contact Found");
-      
     }
 
     const DeleteContact = await Contacts.findByIdAndDelete(req.params.id);
