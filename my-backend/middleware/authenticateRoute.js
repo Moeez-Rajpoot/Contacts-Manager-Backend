@@ -1,17 +1,37 @@
 const asynchandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 
-const validate = asynchandler(async (req,res,next)=>{
-
+const validate = asynchandler(async (req, res, next) => {
     let token;
-    const headertoken = req.header.Authorization || req.header.authorization ;
-    
+    let headerToken = req.headers.authorization;
+
+    if (headerToken && headerToken.startsWith("Bearer")) {
+        token = headerToken.split(" ")[1];
+
+        if (!token) {
+            res.status(401);
+            throw new Error("Token Not Found");
+        }
+
+        try {
+            const decoded = jwt.verify(token, process.env.ACCESSTOKEN);
+            req.user = decoded.user;
+            next();
+        } catch (err) {
+            if (err.name === 'TokenExpiredError') {
+                // Handle token expiration error
+                res.status(401).json({ message: 'Token expired' });
+            } else {
+                // Handle other verification errors
+                res.status(401).json({ message: 'Invalid token' });
+            }
+        }
+    } else {
+        res.status(401);
+        throw new Error("Authorization header not provided or malformed");
+    }
+});
 
 
 
-
-
-
-
-
-})
+module.exports = validate;
