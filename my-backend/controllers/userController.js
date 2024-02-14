@@ -62,7 +62,7 @@ const Login = asynchandler(async (req, res) => {
         },
       },
       process.env.ACCESSTOKEN,
-      { expiresIn: "1m" }
+      { expiresIn: "200m" }
     );
     res.status(201).json({
         AccessToken : accessToken
@@ -74,8 +74,12 @@ const Login = asynchandler(async (req, res) => {
 });
 
 const Current = asynchandler(async (req, res) => {
-  console.log("Current User is  mOEEZ");
-  process.abort;
+
+  
+
+
+
+
 });
 
 module.exports = { Register, Login, Current };
