@@ -3,7 +3,7 @@ const Contacts = require("../model/contactModel");
 
 const getcontact = asynchandler(async (req, res) => {
   try {
-    const Allcontacts = await Contacts.find();
+    const Allcontacts = await Contacts.find({ user_id: req.user.id});
     res.json({
       message: "All Contacts Displayed",
       Contacts: Allcontacts,
@@ -16,7 +16,7 @@ const getcontact = asynchandler(async (req, res) => {
 });
 
 const postcontact = asynchandler(async (req, res) => {
-  console.log("This is Body msg ", req.body);
+  console.log("Post Request ", req.body);
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
     res.status(400);
@@ -28,6 +28,7 @@ const postcontact = asynchandler(async (req, res) => {
       name,
       email,
       phone,
+      user_id: req.user.id
     });
 
     res.status(201).json({
@@ -47,6 +48,11 @@ const putcontact = asynchandler(async (req, res) => {
     const id = req.params;
     const { name, email, phone } = req.body;
 
+    if ( Contacts.user_id.toString() !== req.user.id) {
+      res.status(403);
+      throw new Error("User dont have permission to update other user contacts")
+      
+    }
     const updatecontact = await Contacts.findByIdAndUpdate(
       {
         id,

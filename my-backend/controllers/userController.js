@@ -8,40 +8,47 @@ const jwt = require("jsonwebtoken");
 //access public
 
 const Register = asynchandler(async (req, res) => {
+  console.log("Registering User");
+  console.log(req.body);
   const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    res.status(400);
-    throw new Error("All Fields are Required");
-  }
-  const CheckUsername = await User.findOne({ username });
-  if (CheckUsername) {
-    res.status(400);
-    throw new Error("Username Already Registered");
-  }
-  const CheckUseremail = await User.findOne({ email });
-  if (CheckUseremail) {
-    res.status(400);
-    throw new Error("Email Already Registered");
-  }
-  const hashpassword = await Bcrypt.hash(password, 10);
-  const NewUser = await User.create({
-    username,
-    email,
-    password: hashpassword,
-  });
-
-  console.log(`User Created ${NewUser}`);
-  if (NewUser) {
-    res.status(201).json({
-      _id: NewUser.id,
-      _username: NewUser.username,
-      _email: NewUser.email,
+  try {
+    if (!username || !email || !password) {
+      res.status(400);
+      throw new Error("All Fields are Required");
+    }
+    const CheckUsername = await User.findOne({ username });
+    if (CheckUsername) {
+      res.status(400);
+      throw new Error("Username Already Registered");
+    }
+    const CheckUseremail = await User.findOne({ email });
+    if (CheckUseremail) {
+      res.status(400);
+      throw new Error("Email Already Registered");
+    }
+    const hashpassword = await Bcrypt.hash(password, 10);
+    const NewUser = await User.create({
+      username,
+      email,
+      password: hashpassword,
     });
-  } else {
-    res.status(400);
-    throw new Error("New User Data is not valid");
+    console.log(`User Created ${NewUser}`);
+    if (NewUser) {
+      res.status(201).json({
+        _id: NewUser.id,
+        _username: NewUser.username,
+        _email: NewUser.email,
+      });
+    } else {
+      res.status(400);
+      throw new Error("New User Data is not valid");
+    }
+  } catch (error) {
+    console.error("Error in registration:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 const Login = asynchandler(async (req, res) => {
   const { email, password } = req.body;
@@ -62,7 +69,7 @@ const Login = asynchandler(async (req, res) => {
         },
       },
       process.env.ACCESSTOKEN,
-      { expiresIn: "5m" }
+      { expiresIn: "20m" }
     );
     res.status(201).json({
         AccessToken : accessToken
