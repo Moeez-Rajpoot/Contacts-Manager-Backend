@@ -45,37 +45,51 @@ const postcontact = asynchandler(async (req, res) => {
 
 const putcontact = asynchandler(async (req, res) => {
   try {
-    const id = req.params;
-    const { name, email, phone } = req.body;
-
-    if ( Contacts.user_id.toString() !== req.user.id) {
+    const contact = await Contacts.findById(req.params.id);
+    if (!contact) {
+      res.status(404);
+      throw new Error("No Contact Found");
+      
+    }
+  
+    if ( contact.user_id.toString() !== req.user.id) {
       res.status(403);
-      throw new Error("User dont have permission to update other user contacts")
+      throw new Error("User dont have permission to update other user contacts");
       
     }
     const updatecontact = await Contacts.findByIdAndUpdate(
-      {
-        id,
-        name,
-        email,
-        phone,
-      },
+      
+        req.params.id,
+        req.body,
+        
       { new: true }
+      
     );
     res.json({
       message: "Contact Sucessfully Updated",
+      updatecontact: updatecontact
     });
   } catch (error) {
     res.json({
       message: "Error While Udating Contact",
     });
   }
+  res.json({
+    message: `The Contact is deleted of ${req.params.id}`,
+});
 });
 
 const deletecontact = asynchandler(async (req, res) => {
   try {
-    const ID = req.params.id;
-    const DeleteContact = await Contacts.findByIdAndDelete(ID);
+ 
+    const contact = await Contacts.findById(req.params.id);
+    if (!contact) {
+      res.status(404);
+      throw new Error("No Contact Found");
+      
+    }
+
+    const DeleteContact = await Contacts.findByIdAndDelete(req.params.id);
 
     res.json({
       message: "Contact Deleted Succesfully",
@@ -95,7 +109,7 @@ const deletecontact = asynchandler(async (req, res) => {
 const getcontactid = asynchandler(async (req, res) => {
   const ID = req.params.id;
   try {
-    const ContactID = await Contacts.findById(ID);
+    const ContactID = await Contacts.findById(req.params.id);
     res.json({
       message: "Contact Found !",
       Contact: ContactID,
